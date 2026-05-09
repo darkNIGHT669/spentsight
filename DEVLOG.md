@@ -22,3 +22,24 @@ The hardest part was deciding recommendation priority order. I chose seat mismat
 **Blockers / what I'm stuck on:** Resolved the constructor error and Jest config issues. Currently evaluating the best way to cite vendor URLs in the final report without cluttering the UI.
 
 **Plan for tomorrow:** Draft the GTM and ECONOMICS strategy files. Then, begin the multi-step React form with Tailwind CSS, ensuring the state-management flows correctly into the engine.
+
+## Day 3 — 2025-05-09
+**Hours worked:** 4
+
+**What I did:** Built the complete 3-step audit form. Zustand store with
+localStorage persistence means form state survives reloads. Step 1 is tool
+selection, Step 2 is plan/seat config with auto-calculated spend from the
+registry, Step 3 is team context + submit. Wired Step 3 to POST /api/audit/create
+(building that tomorrow). Built the full design system: dark financial-grade
+aesthetic, DM Mono for numbers, Syne for headings.
+
+**What I learned:** The spend auto-calculation in Step 2 is a UX win — it
+pre-fills the monthly total from the registry so users just confirm rather
+than remember. But I kept the override input because real bills sometimes
+differ from list price (annual contracts, grandfathered plans).
+
+**Blockers / what I'm stuck on:** /api/audit/create doesn't exist yet so
+Step 3 submit will 404. Building that tomorrow.
+
+**Plan for tomorrow:** API route + results page + Anthropic summary integration.
+That's the full end-to-end flow.
