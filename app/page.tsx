@@ -1,65 +1,74 @@
-import Image from "next/image";
+/**
+ * app/page.tsx — Landing page + form host
+ * Dark financial-grade aesthetic. Bloomberg terminal meets modern SaaS.
+ */
 
-export default function Home() {
+import { AuditForm } from "@/components/AuditForm";
+
+export const metadata = {
+  title: "SpendSight — AI Spend Audit for Dev Teams",
+  description:
+    "Find out where your team is overpaying for AI tools. Free, instant, no login required.",
+};
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="main-layout">
+      {/* Hero */}
+      <section className="hero">
+        <div className="hero-eyebrow">
+          <span className="eyebrow-dot" />
+          Free · No login · Results in 60 seconds
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <h1 className="hero-title">
+          Is your team<br />
+          <span className="hero-title--accent">overpaying for AI?</span>
+        </h1>
+        <p className="hero-subtitle">
+          Most dev teams pay for Cursor, Copilot, ChatGPT, and Claude without
+          ever benchmarking the cost. SpendSight audits your stack in 60 seconds
+          and shows you exactly where to cut.
+        </p>
+        <div className="hero-stats">
+          <div className="hero-stat">
+            <span className="hero-stat-number">$4,200</span>
+            <span className="hero-stat-label">avg annual savings found</span>
+          </div>
+          <div className="hero-stat-divider" />
+          <div className="hero-stat">
+            <span className="hero-stat-number">8</span>
+            <span className="hero-stat-label">tools audited</span>
+          </div>
+          <div className="hero-stat-divider" />
+          <div className="hero-stat">
+            <span className="hero-stat-number">60s</span>
+            <span className="hero-stat-label">to your audit</span>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Form */}
+      <section className="form-section" id="audit">
+        <AuditForm />
+      </section>
+
+      {/* Trust signals */}
+      <section className="trust-section">
+        <p className="trust-label">PRICING DATA VERIFIED FROM</p>
+        <div className="trust-logos">
+          {["Cursor", "GitHub", "Anthropic", "OpenAI", "Google", "Windsurf"].map(
+            (name) => (
+              <span key={name} className="trust-logo">
+                {name}
+              </span>
+            )
+          )}
+        </div>
+        <p className="trust-note">
+          No AI used in the audit math. Every recommendation traces to an
+          official pricing page.
+        </p>
+      </section>
+    </main>
   );
 }
