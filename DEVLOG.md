@@ -43,3 +43,24 @@ Step 3 submit will 404. Building that tomorrow.
 
 **Plan for tomorrow:** API route + results page + Anthropic summary integration.
 That's the full end-to-end flow.
+
+## Day 4 — 2025-05-10
+**Hours worked:** 5
+
+**What I did:** Built the complete end-to-end flow. /api/audit/create runs the
+AuditEngine, calls Anthropic for a personalised summary with graceful fallback,
+writes to Supabase, and returns an auditId. /api/leads/create stores emails
+and fires a Resend transactional email. The results page renders the savings
+hero, per-tool breakdown with defensible reasoning, Credex CTA for >$300/mo
+savings, and email capture after value is shown — never before.
+
+**What I learned:** The Anthropic summary prompt needed careful framing to sound
+like a CFO analyst rather than a salesperson. First attempt said "you're
+overspending" which felt accusatory. Reframed as "the audit identified X in
+potential savings" — neutral, specific, finance-grade language.
+
+**Blockers / what I'm stuck on:** Need to add RESEND_API_KEY and test the
+transactional email end-to-end. Will do first thing tomorrow.
+
+**Plan for tomorrow:** Deploy to Vercel, run Lighthouse, fix any scores below
+threshold, then conduct user interviews with the live URL.
