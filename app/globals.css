@@ -721,3 +721,453 @@ body {
   .btn-primary, .btn-secondary { justify-content: center; width: 100%; }
   .hero-stats { gap: 20px; }
 }
+
+/* ─── RESULTS PAGE ───────────────────────────────────────────────────────── */
+/* Append these styles to app/globals.css */
+
+.results-layout {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 48px;
+}
+
+.results-brand {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.results-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.results-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.btn-share {
+  padding: 7px 14px;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-share:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ─── SAVINGS HERO ────────────────────────────────────────────────────────── */
+.savings-hero {
+  text-align: center;
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 32px;
+}
+
+.savings-hero-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.savings-hero-amount {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 10vw, 80px);
+  font-weight: 800;
+  color: var(--accent-primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.savings-hero-amount--optimal {
+  font-size: clamp(32px, 6vw, 48px);
+  color: var(--savings-color);
+}
+
+.savings-hero-period {
+  font-size: 0.45em;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.savings-hero-sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ─── CREDEX CTA ─────────────────────────────────────────────────────────── */
+.credex-cta {
+  background: linear-gradient(135deg, rgba(240,165,0,0.06) 0%, rgba(240,165,0,0.02) 100%);
+  border: 1px solid rgba(240, 165, 0, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-bottom: 32px;
+}
+
+.credex-cta-inner {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.credex-cta-text {
+  flex: 1;
+  min-width: 240px;
+}
+
+.credex-cta-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--accent-primary);
+  margin-bottom: 6px;
+}
+
+.credex-cta-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.credex-cta-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.btn-credex {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 18px;
+  background: var(--accent-primary);
+  color: #000;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  align-self: center;
+}
+
+.btn-credex:hover {
+  background: #fdb81e;
+  transform: translateY(-1px);
+}
+
+/* ─── AI SUMMARY ─────────────────────────────────────────────────────────── */
+.ai-summary {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+}
+
+.ai-summary-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.ai-summary-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+/* ─── RECOMMENDATIONS ────────────────────────────────────────────────────── */
+.recommendations-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rec-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  transition: border-color var(--transition-fast);
+}
+
+.rec-card:hover {
+  border-color: var(--border-emphasis);
+}
+
+.rec--savings {
+  border-left: 3px solid var(--savings-color);
+}
+
+.rec--optimal {
+  border-left: 3px solid var(--border-subtle);
+}
+
+.rec--consider {
+  border-left: 3px solid var(--accent-primary);
+}
+
+.rec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.rec-tool-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rec-tool-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.rec-current-plan {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.rec-savings-block {
+  text-align: right;
+}
+
+.rec-savings-amount {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--savings-color);
+}
+
+.rec-savings-annual {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.rec-optimal-badge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.rec-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.rec-type-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.rec-target {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.rec-reasoning {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.rec-cost-compare {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.rec-cost-current {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.rec-cost-arrow {
+  color: var(--text-muted);
+}
+
+.rec-cost-recommended {
+  color: var(--savings-color);
+}
+
+/* ─── EMAIL CAPTURE ───────────────────────────────────────────────────────── */
+.email-capture {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+
+.email-capture--submitted {
+  text-align: center;
+  padding: 40px;
+}
+
+.email-capture-inner {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.email-capture-text {
+  flex: 1;
+  min-width: 200px;
+}
+
+.email-capture-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.email-capture-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.email-form {
+  flex: 1;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.email-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.email-input {
+  font-size: 15px;
+}
+
+.email-error {
+  font-size: 13px;
+  color: var(--error-color);
+}
+
+.email-privacy {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.email-submitted-icon {
+  font-size: 28px;
+  color: var(--savings-color);
+  margin-bottom: 8px;
+}
+
+.email-submitted-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.email-submitted-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ─── SHARE FOOTER ───────────────────────────────────────────────────────── */
+.share-footer {
+  text-align: center;
+  padding: 32px 0;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.share-footer-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.btn-share--large {
+  padding: 10px 22px;
+  font-size: 14px;
+}
+
+.share-footer-url {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .savings-hero { padding: 32px 0; }
+  .credex-cta-inner { flex-direction: column; }
+  .email-capture-inner { flex-direction: column; }
+  .rec-header { flex-direction: column; gap: 8px; }
+  .results-header { flex-wrap: wrap; gap: 10px; }
+}
