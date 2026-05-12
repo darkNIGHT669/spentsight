@@ -14,9 +14,9 @@ interface AuditInput {
   primaryUseCase: UseCase;
 }
 
-// Explicitly export at the bottom
 
-export type RecommendationType =
+
+type RecommendationType =
   | "downgrade_plan"
   | "switch_tool"
   | "reduce_seats"
@@ -24,7 +24,7 @@ export type RecommendationType =
   | "already_optimal"
   | "consider_api";
 
-export interface ToolRecommendation {
+interface ToolRecommendation {
   toolId: ToolId;
   toolName: string;
   currentPlanName: string;
@@ -40,7 +40,7 @@ export interface ToolRecommendation {
   reasoning: string;
 }
 
-export interface AuditResult {
+interface AuditResult {
   auditId?: string;
   input: AuditInput;
   recommendations: ToolRecommendation[];
@@ -52,4 +52,4 @@ export interface AuditResult {
   aiSummary?: string;
   createdAt?: string;
 }
-export type { ToolEntry, AuditInput };
+export type { ToolEntry, AuditInput, ToolRecommendation, AuditResult, RecommendationType };
