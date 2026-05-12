@@ -64,3 +64,20 @@ transactional email end-to-end. Will do first thing tomorrow.
 
 **Plan for tomorrow:** Deploy to Vercel, run Lighthouse, fix any scores below
 threshold, then conduct user interviews with the live URL.
+
+## Day 5 — 2025-05-11
+**Hours worked:** 3
+
+**What I did:** Deployed to Vercel at [your URL]. Set all environment 
+variables. Ran Lighthouse — scores: Performance [X], Accessibility [X], 
+Best Practices [X]. Fixed [whatever you fixed]. Sent user interview 
+requests to 3 people via college network and Discord.
+
+**What I learned:** [Something real from the deploy — an env var that 
+didn't work, a build error, anything specific]
+
+**Blockers / what I'm stuck on:** Waiting on interview responses. 
+Need all 3 done by tomorrow evening to write USER_INTERVIEWS.md.
+
+**Plan for tomorrow:** Conduct interviews, write USER_INTERVIEWS.md, 
+LANDING_COPY.md, METRICS.md, polish UI based on interview feedback.
