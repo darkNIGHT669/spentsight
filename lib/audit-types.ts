@@ -1,22 +1,19 @@
 import type { ToolId, UseCase } from "./pricing-registry";
 
-// lib/audit-types.ts
-interface ToolEntry {
+export interface ToolEntry {
   toolId: ToolId;
   planId: string;
   seats: number;
   monthlySpend: number;
 }
 
-interface AuditInput {
+export interface AuditInput {
   tools: ToolEntry[];
   teamSize: number;
   primaryUseCase: UseCase;
 }
 
-
-
-type RecommendationType =
+export type RecommendationType =
   | "downgrade_plan"
   | "switch_tool"
   | "reduce_seats"
@@ -24,32 +21,26 @@ type RecommendationType =
   | "already_optimal"
   | "consider_api";
 
-interface ToolRecommendation {
+export interface Recommendation {
   toolId: ToolId;
-  toolName: string;
-  currentPlanName: string;
-  currentMonthlyCost: number;
   recommendationType: RecommendationType;
   recommendedPlanId?: string;
-  recommendedPlanName?: string;
-  recommendedToolId?: ToolId;
-  recommendedToolName?: string;
-  recommendedMonthlyCost: number;
   monthlySavings: number;
   annualSavings: number;
-  reasoning: string;
+  reason: string;
+  // Adding these to ensure the engine and database stay in sync
+  currentMonthlyCost?: number;
 }
 
-interface AuditResult {
+export interface AuditResult {
   auditId?: string;
   input: AuditInput;
-  recommendations: ToolRecommendation[];
+  recommendations: Recommendation[];
   totalCurrentMonthly: number;
   totalRecommendedMonthly: number;
   totalMonthlySavings: number;
   totalAnnualSavings: number;
-  savingsCategory: "optimal" | "moderate" | "significant";
+  savingsCategory: "optimal" | "moderate" | "significant" | "standard";
   aiSummary?: string;
   createdAt?: string;
 }
-export type { ToolEntry, AuditInput, ToolRecommendation, AuditResult, RecommendationType };
