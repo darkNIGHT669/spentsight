@@ -15,7 +15,6 @@ interface AuditInput {
 }
 
 // Explicitly export at the bottom
-export type { ToolEntry, AuditInput };
 
 export type RecommendationType =
   | "downgrade_plan"
@@ -53,3 +52,4 @@ export interface AuditResult {
   aiSummary?: string;
   createdAt?: string;
 }
+export type { ToolEntry, AuditInput };
