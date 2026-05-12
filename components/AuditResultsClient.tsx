@@ -8,7 +8,7 @@
 
 import { useState } from "react";
 import Link from 'next/link';
-import type { ToolRecommendation } from "@/lib/audit-types";
+import type { Recommendation } from "@/lib/audit-types";
 
 const RECOMMENDATION_LABELS: Record<string, string> = {
   downgrade_plan: "Downgrade plan",
@@ -36,7 +36,7 @@ interface Props {
   totalAnnualSavings: number;
   savingsCategory: "optimal" | "moderate" | "significant";
   aiSummary: string;
-  recommendations: ToolRecommendation[];
+  recommendations: Recommendation[];
   createdAt: string;
 }
 

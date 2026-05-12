@@ -27,9 +27,16 @@ export interface Recommendation {
   recommendedPlanId?: string;
   monthlySavings: number;
   annualSavings: number;
+  currentPlanName?: string;
+  toolName: string;
+  recommendedPlanName: string;
+  recommendedToolName?: string;
   reason: string;
-  // Adding these to ensure the engine and database stay in sync
-  currentMonthlyCost?: number;
+  reasoning: string;
+  currentMonthlyCost: number;
+  recommendedMonthlyCost: number;
+  currentSeats: number;
+  recommendedSeats?: number; // Added this field to match the database table
 }
 
 export interface AuditResult {

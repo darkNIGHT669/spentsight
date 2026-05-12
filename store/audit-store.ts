@@ -71,9 +71,9 @@ export const useAuditStore = create<AuditFormState>()(
             toolEntries: isSelected
               ? state.toolEntries
               : {
-                  ...state.toolEntries,
-                  [toolId]: { ...DEFAULT_TOOL_ENTRY },
-                },
+                ...state.toolEntries,
+                [toolId]: { ...DEFAULT_TOOL_ENTRY },
+              },
           };
         }),
 
@@ -110,7 +110,7 @@ export const useAuditStore = create<AuditFormState>()(
     }),
     {
       name: "spentsight-audit-form", // localStorage key
-      partialState: (state) => ({
+      partialize: (state) => ({
         // Don't persist currentStep — always start fresh on reload
         selectedTools: state.selectedTools,
         toolEntries: state.toolEntries,

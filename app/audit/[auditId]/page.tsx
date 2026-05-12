@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 //import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { AuditResultsClient } from "@/components/AuditResultsClient";
-import type { ToolRecommendation } from "@/lib/audit-types";
+import type { Recommendation } from "@/lib/audit-types";
 
 interface AuditRow {
   id: string;
@@ -18,7 +18,7 @@ interface AuditRow {
   total_annual_savings: number;
   savings_category: string;
   ai_summary: string;
-  recommendations: ToolRecommendation[];
+  recommendations: Recommendation[];
   created_at: string;
 }
 
