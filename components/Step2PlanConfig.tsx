@@ -69,8 +69,8 @@ export function Step2PlanConfig() {
                   {tool.category === "coding_assistant"
                     ? "Code assistant"
                     : tool.category === "chat_ai"
-                    ? "Chat AI"
-                    : "API · usage-based"}
+                      ? "Chat AI"
+                      : "API · usage-based"}
                 </span>
               </div>
 
@@ -139,7 +139,7 @@ export function Step2PlanConfig() {
                   </div>
                   {isApi && (
                     <p className="field-hint">
-                      Enter your actual last month's API bill
+                      Enter your actual last month&apos;s API bill
                     </p>
                   )}
                   {!isApi && selectedPlanId && (

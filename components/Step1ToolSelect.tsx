@@ -41,7 +41,7 @@ export function Step1ToolSelect() {
       <div className="step-header">
         <p className="step-label">STEP 1 OF 3</p>
         <h2 className="step-title">Which AI tools does your team pay for?</h2>
-        <p className="step-subtitle">Select all that apply. Include tools with free tiers if you've upgraded any seats.</p>
+        <p className="step-subtitle">Select all that apply. Include tools with free tiers if you&apos;ve upgraded any seats.</p>
       </div>
 
       <div className="tool-grid">

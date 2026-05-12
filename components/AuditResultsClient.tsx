@@ -7,6 +7,7 @@
  */
 
 import { useState } from "react";
+import Link from 'next/link';
 import type { ToolRecommendation } from "@/lib/audit-types";
 
 const RECOMMENDATION_LABELS: Record<string, string> = {
@@ -49,7 +50,7 @@ export function AuditResultsClient({
   recommendations,
   createdAt,
 }: Props) {
-  const [showEmailModal, setShowEmailModal] = useState(false);
+  //const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [role, setRole] = useState("");
@@ -109,7 +110,7 @@ export function AuditResultsClient({
     <div className="results-layout">
       {/* Header */}
       <header className="results-header">
-        <a href="/" className="results-brand">SpendSight</a>
+        <Link href="/" className="results-brand">SpendSight</Link>
         <div className="results-meta">
           <span className="results-date">Audited {auditDate}</span>
           <button onClick={handleShare} className="btn-share">

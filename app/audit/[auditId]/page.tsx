@@ -5,7 +5,7 @@
  */
 
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
+//import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { AuditResultsClient } from "@/components/AuditResultsClient";
 import type { ToolRecommendation } from "@/lib/audit-types";
@@ -36,12 +36,9 @@ async function getAudit(auditId: string): Promise<AuditRow | null> {
 }
 
 // ─── OPEN GRAPH META ─────────────────────────────────────────────────────────
-export async function generateMetadata({
-  params,
-}: {
-  params: { auditId: string };
-}): Promise<Metadata> {
-  const audit = await getAudit(params.auditId);
+export async function generateMetadata({ params }: { params: Promise<{ auditId: string }> }) {
+  const { auditId } = await params; // Unwrapping the promise
+  const audit = await getAudit(auditId);
   if (!audit) return { title: "Audit not found — SpendSight" };
 
   const annualSavings = Math.round(audit.total_annual_savings);
@@ -76,12 +73,9 @@ export async function generateMetadata({
 }
 
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
-export default async function AuditPage({
-  params,
-}: {
-  params: { auditId: string };
-}) {
-  const audit = await getAudit(params.auditId);
+export default async function AuditPage({ params }: { params: Promise<{ auditId: string }> }) {
+  const { auditId } = await params; // Unwrapping the promise
+  const audit = await getAudit(auditId);
   if (!audit) notFound();
 
   return (
