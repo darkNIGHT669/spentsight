@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
   try {
     await resend.emails.send({
-      from: "SpendSight <audit@spentsight.com>",
+      from: "SpendSight <onboarding@resend.dev>",
       to: email,
       subject: `Your AI spend audit — $${Math.round(monthlySavings * 12).toLocaleString()}/yr in potential savings`,
       html: `
