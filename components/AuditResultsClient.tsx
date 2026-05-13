@@ -59,11 +59,12 @@ export function AuditResultsClient({
   const [emailError, setEmailError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = `${window.location.origin}/audit/${auditId}`;
+
   const isSignificant = savingsCategory === "significant";
   const isOptimal = savingsCategory === "optimal";
 
   const handleShare = async () => {
+    const shareUrl = `${typeof window !== "undefined" ? window.location.origin : "https://spentsight.vercel.app"}/audit/${auditId}`;
     await navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -323,7 +324,7 @@ export function AuditResultsClient({
         <button onClick={handleShare} className="btn-share btn-share--large">
           {copied ? "✓ Link copied!" : "Share this audit tool →"}
         </button>
-        <p className="share-footer-url">{shareUrl}</p>
+        <p className="share-footer-url">{`${process.env.NEXT_PUBLIC_BASE_URL}/audit/${auditId}`}</p>
       </section>
     </div>
   );
