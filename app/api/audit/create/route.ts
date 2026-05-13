@@ -1,22 +1,17 @@
 /**
  * app/api/audit/create/route.ts
  *
- * Receives form POST → runs AuditEngine → calls Anthropic for summary
+ * Receives form POST → runs AuditEngine → calls Gemini for summary
  * → writes to Supabase → returns auditId to client.
  *
- * Anthropic failure is graceful: a templated summary is used as fallback.
+ * Gemini failure is graceful: a templated summary is used as fallback.
  * The audit result is NEVER blocked by an AI failure.
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 import { AuditEngine } from "@/lib/audit-engine";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import type { AuditInput } from "@/lib/audit-types";
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
-});
 
 // ─── RATE LIMITING (simple in-memory, good enough for MVP) ──────────────────
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -38,7 +33,7 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-// ─── ANTHROPIC SUMMARY ───────────────────────────────────────────────────────
+// ─── GEMINI SUMMARY ──────────────────────────────────────────────────────────
 
 async function generateSummary(
   input: AuditInput,
@@ -63,17 +58,29 @@ Context:
 Write a single paragraph of exactly 80-100 words. Be specific, use the numbers above, and sound like a CFO-friendly analyst — not a salesperson. If savings are significant (>$300/mo), be direct about the opportunity. If the stack is already optimal, acknowledge it honestly. Never mention Credex. Do not use bullet points. Do not start with "I" or "This audit".`;
 
   try {
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 200,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+        }),
+      }
+    );
 
-    const content = message.content[0];
-    if (content.type === "text") return content.text;
-    throw new Error("Unexpected content type from Anthropic");
+    if (!response.ok) {
+      throw new Error(`Gemini API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!text) throw new Error("Empty response from Gemini");
+
+    return text;
   } catch (err) {
-    console.error("Anthropic API error — using fallback summary:", err);
+    console.error("Gemini API error — using fallback summary:", err);
     return generateFallbackSummary(
       totalCurrentMonthly,
       totalMonthlySavings,
@@ -108,7 +115,6 @@ export async function POST(req: NextRequest) {
   // Honeypot check
   const body = await req.json();
   if (body._hp) {
-    // Bot filled the honeypot field
     return NextResponse.json({ auditId: "fake-id" }, { status: 200 });
   }
 
