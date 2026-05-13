@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
   if (body._hp) {
     return NextResponse.json({ auditId: "fake-id" }, { status: 200 });
   }
-
+  console.log("DEBUG - Incoming Audit Data:", JSON.stringify(body, null, 2));
   // Rate limit by IP
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
@@ -127,6 +127,7 @@ export async function POST(req: NextRequest) {
       { status: 429 }
     );
   }
+
 
   // Validate input shape
   const { tools, teamSize, primaryUseCase } = body as AuditInput;
