@@ -7,6 +7,7 @@
  */
 
 import type { Recommendation } from "@/lib/audit-types";
+import Link from "next/link";
 
 interface AuditSnapshot {
   recommendations: Recommendation[];
@@ -61,10 +62,10 @@ export function AuditDiffView({
     <div className="diff-layout">
       {/* Header */}
       <header className="results-header">
-        <a href="/" className="results-brand">SpendSight</a>
-        <a href={`/audit/${auditId}`} className="btn-share">
+        <Link href="/" className="results-brand">SpendSight</Link>
+        <Link href={`/audit/${auditId}`} className="btn-share">
           View original audit
-        </a>
+        </Link>
       </header>
 
       {/* Hero */}
@@ -197,12 +198,12 @@ export function AuditDiffView({
 
       {/* CTA */}
       <div className="diff-cta">
-        <a href="/" className="btn-primary">
+        <Link href="/" className="btn-primary">
           Run a new audit →
-        </a>
-        <a href={`/audit/${auditId}`} className="btn-secondary">
+        </Link>
+        <Link href={`/audit/${auditId}`} className="btn-secondary">
           View original audit
-        </a>
+        </Link>
       </div>
     </div>
   );
