@@ -8,7 +8,7 @@ export class AuditEngine {
     const recommendations: Recommendation[] = [];
     let totalCurrentMonthly = 0;
     let totalMonthlySavings = 0;
-
+ 
     this.input.tools.forEach((tool) => {
       const toolMeta = PRICING_REGISTRY[tool.toolId];
       const currentPlan = toolMeta.plans.find(p => p.id === tool.planId);
@@ -32,7 +32,7 @@ export class AuditEngine {
 
       // 1. Cursor Logic
       if (tool.toolId === "cursor" && tool.planId === "ultra") {
-        const proPlan = toolMeta.plans.find(p => p.id === "pro");
+        //const proPlan = toolMeta.plans.find(p => p.id === "pro");
         const proCost = 20 * tool.seats;
         const savings = tool.monthlySpend - proCost;
         rec = {
