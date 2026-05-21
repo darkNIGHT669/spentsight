@@ -162,3 +162,14 @@ me twice this week.
 **Blockers / what I'm stuck on:** None — submitted.
 
 **Plan for tomorrow:** N/A — Round 1 complete.
+
+## 2026-05-20 16:00 – Start
+Received Round 2 assignment 6 hours ago. Read carefully before building.
+4 required features: persistent audit storage with pricing snapshot,
+pricing-change detection, notification emails, diff view on re-run.
+
+Plan: use existing Supabase + Resend from Round 1. Fix Resend first
+since Round 1 email was broken. Add pricing_snapshot column to audits.
+Build detection endpoint before cron — manual trigger is acceptable per spec.
+
+Branch: round-2-reaudit

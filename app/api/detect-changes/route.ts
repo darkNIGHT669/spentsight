@@ -23,7 +23,7 @@ const resend = new Resend(process.env.RESEND_API_KEY!);
 
 interface StoredAudit {
   id: string;
-  input: {
+  input: { 
     tools: { toolId: ToolId; planId: string; seats: number; monthlySpend: number }[];
     teamSize: number;
     primaryUseCase: string;

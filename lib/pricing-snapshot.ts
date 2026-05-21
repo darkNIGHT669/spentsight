@@ -92,7 +92,7 @@ export function detectPricingChanges(
           newPrice: currentPlan.monthlyPerSeat,
           delta: currentPlan.monthlyPerSeat - storedPlan.monthlyPerSeat,
         });
-      }
+      } 
     }
   }
 

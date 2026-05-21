@@ -1,40 +1,34 @@
 /**
  * app/api/audit/create/route.ts
  *
- * Receives form POST → runs AuditEngine → calls Gemini for summary
- * → writes to Supabase → returns auditId to client.
- *
- * Gemini failure is graceful: a templated summary is used as fallback.
- * The audit result is NEVER blocked by an AI failure.
+ * Round 2 update: now saves pricing_snapshot and pricing_version
+ * alongside the audit result so stale audits can be detected later.
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { AuditEngine } from "@/lib/audit-engine";
 import { supabaseAdmin } from "@/lib/supabase/server";
+import { capturePricingSnapshot, snapshotVersion } from "@/lib/pricing-snapshot";
 import type { AuditInput } from "@/lib/audit-types";
 
-// ─── RATE LIMITING (simple in-memory, good enough for MVP) ──────────────────
+// ─── RATE LIMITING ────────────────────────────────────────────────────────────
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 10; // requests per window
-const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const RATE_LIMIT = 10;
+const RATE_WINDOW_MS = 60 * 60 * 1000;
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
   const record = rateLimitMap.get(ip);
-
   if (!record || now > record.resetAt) {
     rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
     return false;
   }
-
   if (record.count >= RATE_LIMIT) return true;
-
   record.count++;
   return false;
 }
 
-// ─── GEMINI SUMMARY ──────────────────────────────────────────────────────────
-
+// ─── GEMINI SUMMARY ───────────────────────────────────────────────────────────
 async function generateSummary(
   input: AuditInput,
   totalCurrentMonthly: number,
@@ -69,15 +63,10 @@ Write a single paragraph of exactly 80-100 words. Be specific, use the numbers a
       }
     );
 
-    if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`Gemini error: ${response.status}`);
     const data = await response.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!text) throw new Error("Empty response from Gemini");
-
+    if (!text) throw new Error("Empty Gemini response");
     return text;
   } catch (err) {
     console.error("Gemini API error — using fallback summary:", err);
@@ -99,28 +88,25 @@ function generateFallbackSummary(
   toolNames: string
 ): string {
   if (savingsCategory === "optimal") {
-    return `Your team of ${teamSize} is spending $${totalCurrentMonthly.toFixed(0)}/month across ${toolNames}. Based on current pricing and your usage profile, your stack appears well-optimised — you're on plans appropriate for your team size and use case. Monitor your spend as pricing and team size change, and revisit this audit quarterly.`;
+    return `Your team of ${teamSize} is spending $${totalCurrentMonthly.toFixed(0)}/month across ${toolNames}. Based on current pricing and your usage profile, your stack appears well-optimised. Monitor your spend as pricing and team size change, and revisit this audit quarterly.`;
   }
-
   if (savingsCategory === "moderate") {
-    return `Your team of ${teamSize} is spending $${totalCurrentMonthly.toFixed(0)}/month on AI tools including ${toolNames}. The audit identified $${totalMonthlySavings.toFixed(0)}/month in potential savings — $${(totalMonthlySavings * 12).toFixed(0)} annually — through plan adjustments and billing optimisations. The recommendations below require no change in tooling; only plan or billing changes.`;
+    return `Your team of ${teamSize} is spending $${totalCurrentMonthly.toFixed(0)}/month on AI tools including ${toolNames}. The audit identified $${totalMonthlySavings.toFixed(0)}/month in potential savings — $${(totalMonthlySavings * 12).toFixed(0)} annually — through plan adjustments and billing optimisations.`;
   }
-
-  return `Your team of ${teamSize} is spending $${totalCurrentMonthly.toFixed(0)}/month on AI tools including ${toolNames}. The audit identified $${totalMonthlySavings.toFixed(0)}/month ($${(totalMonthlySavings * 12).toFixed(0)}/year) in potential savings — a ${Math.round((totalMonthlySavings / totalCurrentMonthly) * 100)}% reduction. These are not speculative savings: each recommendation is based on verified pricing from vendor pages and applies directly to your reported usage.`;
+  return `Your team of ${teamSize} is spending $${totalCurrentMonthly.toFixed(0)}/month on AI tools including ${toolNames}. The audit identified $${totalMonthlySavings.toFixed(0)}/month ($${(totalMonthlySavings * 12).toFixed(0)}/year) in potential savings — a ${Math.round((totalMonthlySavings / totalCurrentMonthly) * 100)}% reduction. Each recommendation is based on verified pricing from vendor pages.`;
 }
 
-// ─── ROUTE HANDLER ───────────────────────────────────────────────────────────
-
+// ─── ROUTE HANDLER ────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
-  // Honeypot check
   const body = await req.json();
+
+  // Honeypot
   if (body._hp) {
     return NextResponse.json({ auditId: "fake-id" }, { status: 200 });
   }
-  console.log("DEBUG - Incoming Audit Data:", JSON.stringify(body, null, 2));
-  // Rate limit by IP
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+
+  // Rate limit
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
   if (isRateLimited(ip)) {
     return NextResponse.json(
       { error: "Too many requests. Please try again in an hour." },
@@ -128,8 +114,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-
-  // Validate input shape
+  // Validate
   const { tools, teamSize, primaryUseCase } = body as AuditInput;
   if (!tools?.length || !teamSize || !primaryUseCase) {
     return NextResponse.json(
@@ -138,12 +123,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Run the audit engine — pure deterministic logic, no AI
+  // Run audit engine
   const input: AuditInput = { tools, teamSize, primaryUseCase };
   const engine = new AuditEngine(input);
   const result = engine.run();
 
-  // Generate AI summary (with fallback — never blocks the response)
+  // Capture pricing snapshot at this exact moment
+  const pricingSnapshot = capturePricingSnapshot();
+  const pricingVersion = snapshotVersion(pricingSnapshot);
+
+  // Generate AI summary
   const aiSummary = await generateSummary(
     input,
     result.totalCurrentMonthly,
@@ -151,7 +140,7 @@ export async function POST(req: NextRequest) {
     result.savingsCategory
   );
 
-  // Write to Supabase
+  // Write to Supabase — now includes pricing snapshot
   const { data, error } = await supabaseAdmin
     .from("audits")
     .insert({
@@ -163,6 +152,8 @@ export async function POST(req: NextRequest) {
       total_annual_savings: result.totalAnnualSavings,
       savings_category: result.savingsCategory,
       ai_summary: aiSummary,
+      pricing_snapshot: pricingSnapshot,
+      pricing_version: pricingVersion,
     })
     .select("id")
     .single();
