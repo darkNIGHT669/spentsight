@@ -39,17 +39,14 @@ export async function POST(req: NextRequest) {
 
   // Store lead — upsert so duplicate emails for same audit don't error
   const { error: dbError } = await supabaseAdmin
-    .from("leads")
-    .upsert(
-      {
-        audit_id: auditId,
-        email,
-        company_name: companyName || null,
-        role: role || null,
-        team_size: teamSize || null,
-      },
-      { onConflict: "audit_id,email" }
-    );
+  .from("leads")
+  .insert({
+    audit_id: auditId,
+    email,
+    company_name: companyName || null,
+    role: role || null,
+    team_size: teamSize || null,
+  });
 
   if (dbError) {
     console.error("Lead insert error:", dbError);
